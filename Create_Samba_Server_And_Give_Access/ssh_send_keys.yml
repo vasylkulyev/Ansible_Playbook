@@ -1,0 +1,11 @@
+---
+- name: ssh_key_send
+  hosts: mail
+  become: yes
+
+  tasks:
+  - name: send my pub-keys
+    authorized_key:
+      user: USER
+      state: present
+      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

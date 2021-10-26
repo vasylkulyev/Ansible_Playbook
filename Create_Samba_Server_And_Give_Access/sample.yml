@@ -1,0 +1,9 @@
+---
+  - name: Test
+    hosts: mail
+    become: yes
+    tasks:
+        - name: Add Packages
+          pkgng:
+              name: rsync,bash,wget,curl,tree
+    

@@ -1,0 +1,39 @@
+---
+- name: Install Srvices
+  block: # Astra or Ubuntu #
+    - name: Update
+      apt:
+        update_cache: yes
+
+    - name: install docker
+      apt: name={{ item }} state=latest
+      loop:
+         - docker.io
+         - python3-pip
+
+    - name: Start Docker service
+      service: name=docker state=started enabled=yes
+
+    - name: Add user to docker group
+      user:
+        name: USER
+        groups: docker
+        append: yes
+    
+    - name: install nginx to native system
+      apt: name=nginx state=latest
+      tags:
+        - native
+
+    - name: run nginx container in docker
+      shell: docker run -d -p 8888:80 nginx
+      tags:
+        - docker
+   
+    - name: start nginx
+      service: name=nginx state=started enabled=yes
+      tags:
+        - native
+
+  when: ansible_distribution == "Astra Linux (Orel)" or ansible_distribution == "Ubuntu"
+  ignore_errors: yes

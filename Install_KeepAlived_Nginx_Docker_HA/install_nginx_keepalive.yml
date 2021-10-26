@@ -1,0 +1,6 @@
+---
+- hosts: astra
+  become: yes
+  roles:
+      - nginx_docker
+      - keepalive

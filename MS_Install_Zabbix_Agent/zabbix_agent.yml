@@ -1,0 +1,25 @@
+---
+- name: Install Services And Managing Hosts
+  hosts: windows
+  remote_user: USER
+  
+  tasks:
+    - name: Copy Zabbix_Agent
+      win_copy:
+        src: ./zabbix/bin/
+        dest: C:\zabbix\
+      
+    - name: Create new agent config file
+      win_template:
+        src: ./templates/zabbix_agentd.conf
+        dest: C:\zabbix\conf\
+    
+    - name: Install Zabbix_Agent
+      win_command: zabbix_agentd.exe -i -c C:\zabbix\conf\zabbix_agentd.conf
+      args:
+        chdir: C:\zabbix\
+
+    - name: Start Zabbix_Agent
+      win_command: zabbix_agentd.exe -s -c C:\zabbix\conf\zabbix_agentd.conf
+      args:
+        chdir: C:\zabbix\

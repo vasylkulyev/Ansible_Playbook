@@ -1,0 +1,23 @@
+---
+  - name: Inventarisation
+    hosts: windows
+    tasks:
+      - name: grab servers parameters
+        vars:
+          msg: |
+              RAM: {{ ansible_memtotal_mb }}
+              OS: {{ ansible_os_name }}
+              DNS: {{ ansible_nodename }}
+              CPU: {{ ansible_processor }}
+              CPU_Cores: {{ ansible_processor_cores }}
+              SWAP: {{ ansible_swaptotal_mb }}
+              ARCH: {{ ansible_architecture }}
+              IP: {{ ansible_ip_addresses }}
+        debug:
+          msg: "{{ msg.split('\n') }}"
+        tags: debug_info
+#      - debug:
+#         var: output.ansible_facts.ansible_distribution
+#      - debug:
+#         var: output.ansible_facts.ansible_domain
+         

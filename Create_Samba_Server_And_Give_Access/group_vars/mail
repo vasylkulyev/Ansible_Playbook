@@ -1,0 +1,20 @@
+ansible_user: USER
+ansible_password: PASSWORD
+ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+office_users:
+   - un: v.kulyev
+     uc: Vasiliy Kulyev
+     up: ANY_PASSWORD
+
+   - un: i.mana
+     uc: Irina Mana
+     up: ANY_PASSWORD
+
+   - un: e.busom
+     uc: Elena Busom
+     up: ANY_PASSWORD
+
+   - un: i.nakima 
+     uc: Irina Nakima
+     up: ANY_PASSWORD

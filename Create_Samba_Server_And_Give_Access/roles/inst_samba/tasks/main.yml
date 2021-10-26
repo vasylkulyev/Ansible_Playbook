@@ -1,0 +1,85 @@
+---
+- name: add sysctl params
+  sysctl:
+    name: kern.maxfiles
+    value: 25600
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.conf
+    reload: no
+
+- sysctl:
+    name: kern.maxfilesperproc
+    value: 16384
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.conf
+    reload: no
+
+- sysctl:
+    name: net.inet.tcp.sendspace
+    value: 65536
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.conf
+    reload: no
+
+- sysctl:
+    name: net.inet.tcp.recvspace
+    value: 65536
+    sysctl_set: yes
+    sysctl_file: /etc/sysctl.conf
+    reload: yes
+
+- name: add samba group
+  group:
+    name: nas_users
+    state: present
+
+- name: Creates working dir
+  file:
+    path: /media/store/users
+    state: directory
+    group: nas_users
+    mode: 0750
+
+- name: Add packages 
+  pkgng:
+    name: samba411,gtar
+
+- name: Copy main config 
+  copy:
+    src: files/smb4.conf
+    dest: /usr/local/etc/smb4.conf
+
+- name: start samba
+  service:
+    name: samba_server
+    state: started
+    enabled: yes
+
+- name: copy skel dirs
+  unarchive:
+    src: files/skel.tar.bz2
+    dest: /etc
+
+- name: Add users for email
+  user:
+    name: "{{ item.un }}"
+    comment: "{{ item.uc }}"
+    password: "{{ item.up }}" 
+    shell: /usr/sbin/nologin
+    groups: nas_users
+    append: yes
+    skeleton: /etc/skel
+  loop: "{{ office_users }}"
+
+- name: Add samba dirs
+  file:
+    path: "/media/store/users/{{ item.un }}"
+    state: directory
+    owner: "{{ item.un }}"
+    group: nas_users
+    mode: 0750
+  loop: "{{ office_users }}"
+
+- name: set Samba passwords for each user
+  shell: "printf '{{ item.up }}\n{{ item.up }}\n' | smbpasswd -a {{ item.un }}"
+  loop: "{{ office_users }}"

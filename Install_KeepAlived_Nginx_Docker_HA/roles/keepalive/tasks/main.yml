@@ -1,0 +1,17 @@
+---
+# tasks file for keepalived
+- name: install keepalived
+  apt: name=keepalived state=latest
+
+- name: copy keepalived config
+  template:
+    src: etc_keepalived_keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: 0644
+
+- name: start keepalived
+  systemd:
+    daemon_reload: yes
+    name: keepalived
+    enabled: yes
+    state: started

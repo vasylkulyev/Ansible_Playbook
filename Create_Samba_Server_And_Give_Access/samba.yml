@@ -1,0 +1,8 @@
+---
+- name: Installation of file_server
+  hosts: mail
+  gather_facts: False
+  become: yes
+
+  roles:
+    - inst_samba
