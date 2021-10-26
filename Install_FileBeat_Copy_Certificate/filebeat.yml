@@ -1,0 +1,87 @@
+---
+- name: Install FileBeat And Managing Hosts
+  hosts: linux
+  become: yes
+  vars:
+    ansible_ssh_private_key_file: "~/.ssh/id_rsa"
+  remote_user: USER
+  
+  tasks:
+  - block: # CentOS #
+      - name: Download FileBeat RPM package
+        shell: curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.14.0-x86_64.rpm
+
+      - name: Extract RPM File
+        shell: sudo rpm -vi filebeat-7.14.0-x86_64.rpm
+
+      - name: Update
+        yum:
+          update_cache: yes
+
+      - name: Remove FileBeat Config-File
+        file: >
+          path=/etc/filebeat/filebeat.yml
+          state=absent
+
+      - name: Create New FileBeat config file
+        template: src=templates/filebeat-centos.yml.j2 dest=/etc/filebeat/filebeat.yml mode=0755
+
+      - name: Copy Certificate To Hosts
+        copy: src=files/elasticsearch-ca.pem dest=/etc/filebeat/elasticsearch-ca.pem mode=0660
+
+      - name: Enable Some Modules
+        shell: filebeat modules enable system
+
+      - name: Restart and Enable FileBeat
+        systemd:
+          name: filebeat
+          state: restarted
+          enabled: yes
+      
+      - name: long running task
+        shell: filebeat setup -e
+        async: 2592000               # 60*60*24*30 – 1 month
+        poll: 0
+
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
+
+
+  - block: # Ubuntu #
+      - name: Download FileBeat DEB package
+        shell: curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.14.0-amd64.deb
+
+      - name: Extract Deb File
+        shell: sudo dpkg -i filebeat-7.14.0-amd64.deb
+
+      - name: Apt-Get Update
+        apt:
+          update_cache: yes 
+   
+      - name: Remove FileBeat Config-File
+        file: >
+          path=/etc/filebeat/filebeat.yml 
+          state=absent
+      
+      - name: Create New FileBeat config file
+        template: src=templates/filebeat-ubuntu.yml.j2 dest=/etc/filebeat/filebeat.yml mode=0755
+
+      - name: Copy Certificate To Hosts
+        copy: src=files/elasticsearch-ca.pem dest=/etc/filebeat/elasticsearch-ca.pem mode=0660
+    
+      - name: Enable Some Modules
+        shell: filebeat modules enable system
+
+      - name: Restart and Enable FileBeat
+        systemd:
+          name: filebeat
+          state: restarted
+          enabled: yes
+
+      - name: long running task
+        shell: filebeat setup -e
+        async: 2592000               # 60*60*24*30 – 1 month
+        poll: 0
+
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    ignore_errors: yes

@@ -1,0 +1,49 @@
+---
+- name: Remove FileBeat
+  hosts: linux
+  become: yes
+  vars:
+    ansible_ssh_private_key_file: "~/.ssh/id_rsa"
+  remote_user: USER
+  
+  tasks:
+  - block: # CentOS #
+
+      - name: Stop FileBeat
+        systemd:
+          name: filebeat
+          state: stopped
+
+      - name: Remove the FileBeat
+        yum:
+          name: filebeat
+          state: absent
+
+      - name: Clean up files
+        file:
+          name: /etc/filebeat/
+          state: absent
+
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
+
+
+  - block: # Ubuntu #
+
+      - name: Stop FileBeat
+        systemd:
+          name: filebeat
+          state: stopped
+        
+      - name: Remove the FileBeat
+        apt:
+          name: filebeat
+          state: absent
+
+      - name: Clean up files
+        file:
+          name: /etc/filebeat/
+          state: absent
+
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    ignore_errors: yes

@@ -1,0 +1,23 @@
+---
+- name: Create-User_Add-to-Sudo
+  hosts: linux
+  become: yes
+  
+  tasks:
+  - block: # CentOS #
+      - include_vars: users.yml
+      - name: Create_Users
+        user:
+          name: "{{ item.username }}"
+          password: '$6$.yBlYxeqDK$UdknYCvTVXWU1jV3vsFQ4ElN9IJ4oxhFHFPCplp/9tp.3dEJX4XUIsqGDHlXwKMyQbvmTQbctZi/NJA8BrSV3.'
+          shell: /bin/bash
+          groups: wheel
+          state: present
+        with_items: '{{users}}'
+
+      - name: Expiring password for users
+        shell: chage --lastday 0 "{{ item.username }}"
+        with_items: '{{users}}'
+
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
