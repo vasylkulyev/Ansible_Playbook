@@ -1,0 +1,5 @@
+---
+# defaults file for jenkins_via_docker
+adduser_user_name: "v.kulyev"
+default_container_image: 'jenkins/jenkins:lts'
+container_name: 'jenkins'

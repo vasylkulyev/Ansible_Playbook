@@ -1,0 +1,6 @@
+---
+- hosts: linux
+  become: yes
+  roles:
+#      - create_sudo_user
+      - jenkins_via_docker
