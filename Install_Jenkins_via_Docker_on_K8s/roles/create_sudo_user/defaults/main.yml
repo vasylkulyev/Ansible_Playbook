@@ -1,5 +1,0 @@
----
-# defaults file for create_sudo_user
-adduser_user_name: "v.kulyev"
-adduser_public_keys: "~/.ssh/id_rsa.pub"
-adduser_password: '$6$k7qj3miigTAw/xV$Ml9iCn8ac5Eq./ffimqFSH6YUliab0umVQMKk0vZeiGvP01S14dHhOgligAiqpoP5xU9XEHDmBIRV7L7LKzo81'
