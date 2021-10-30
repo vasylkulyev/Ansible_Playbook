@@ -1,0 +1,18 @@
+---
+pkgs:
+  - pkg: mc
+  - pkg: tree
+  - pkg: iotop
+  - pkg: iftop
+  - pkg: nmap
+  - pkg: tcpdump
+  - pkg: tmux
+  - pkg: screen
+  - pkg: lsof
+  - pkg: sysstat
+  - pkg: nano
+
+
+
+
+

@@ -1,0 +1,33 @@
+---
+- name: Install-package_Create-User_Add-to-Sudo
+  hosts: linux
+  become: yes
+  
+  tasks:
+  - block: # CentOS #
+      - include_vars: pkgs.yml
+      - name: Update
+        yum:
+          update_cache: yes
+      - name: Install-packages
+        yum:
+          name: "{{ item.pkg }}"
+          state: latest
+        with_items: '{{pkgs}}'
+
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
+
+  - block: # Ubuntu #
+      - include_vars: pkgs.yml
+      - name: Update
+        apt:
+          update_cache: yes
+      - name: Install-packages
+        apt:
+          name: "{{ item.pkg }}"
+          state: latest
+        with_items: '{{pkgs}}'
+
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    ignore_errors: yes 

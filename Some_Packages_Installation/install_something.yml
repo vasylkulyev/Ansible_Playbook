@@ -1,0 +1,35 @@
+---
+- name: Install packages
+  hosts: linux
+  become: yes
+  vars:
+    ansible_ssh_private_key_file: "~/.ssh/id_rsa"
+  remote_user: USER
+  
+  tasks:
+  - block: # CentOS #
+      - name: Update
+        yum:
+          update_cache: yes
+
+      - name: Installation Process
+        yum: >
+          name=screen
+          state=latest
+      
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
+
+
+  - block: # Ubuntu #
+      - name: Update
+        apt:
+          update_cache: yes 
+   
+      - name: Installation Process
+        apt: >
+          name=screen
+          state=latest
+      
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    ignore_errors: yes
