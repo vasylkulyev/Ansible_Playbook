@@ -52,28 +52,28 @@
       
   - name: add firewalld rich-rules
     firewalld:
-        rich_rule: 'rule family="ipv4" source address=185.15.0.0/16 accept'
+        rich_rule: 'rule family="ipv4" source address=10.10.0.0/16 accept'
         zone: public
         immediate: yes
         permanent: true
         state: enabled
 
   - firewalld:
-        rich_rule: 'rule family="ipv4" source address=80.245.121.0/24 accept' 
+        rich_rule: 'rule family="ipv4" source address=10.10.10.0/24 accept' 
         zone: public
         immediate: yes
         permanent: true
         state: enabled
 
   - firewalld:
-        rich_rule: 'rule family="ipv4" source address=213.59.0.0/16 accept' 
+        rich_rule: 'rule family="ipv4" source address=192.168.0.0/16 accept' 
         zone: public
         immediate: yes
         permanent: true
         state: enabled
 
   - firewalld:
-        rich_rule: 'rule family="ipv4" source address=37.200.67.157 accept'
+        rich_rule: 'rule family="ipv4" source address=10.10.10.10 accept'
         zone: public
         immediate: yes
         permanent: true
