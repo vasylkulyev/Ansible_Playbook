@@ -1,0 +1,19 @@
+---
+  - name: Update && Upgrade
+    hosts: linux
+    become: yes
+
+    tasks:
+    - name: Update & Upgrade CentOS Servers
+      yum:
+        update_cache: yes
+        name: "*"
+        state: latest
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: Update & Upgrade Ubuntu Servers
+      apt:
+        update_cache: yes
+        upgrade: 'yes'
+        cache_valid_time: 86400
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

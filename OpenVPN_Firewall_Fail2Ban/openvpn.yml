@@ -1,0 +1,86 @@
+---
+- name: Install OpenVPN
+  hosts: linux
+  become: yes
+  
+  tasks:
+  - name: Enable EPEL Repository
+    yum:
+      name: epel-release
+      state: latest
+      
+  - name: Install fail2ban
+    yum: >
+      name=fail2ban
+      state=latest
+      
+  - name: Enable fail2ban service
+    systemd:
+      name: fail2ban
+      enabled: yes
+      state: started
+      
+  - name: create jail.local
+    template: src=templates/jail.local.j2 dest=/etc/fail2ban/jail.local mode=0755
+    
+  - name: restart fail2ban
+    systemd:
+      name: fail2ban
+      state: restarted
+      
+  - name: Install Repository OpenVpn
+    yum: >
+      name=https://as-repository.openvpn.net/as-repo-centos7.rpm
+      state=present
+      
+  - name: Install OpenVpn Server
+    yum: >
+      name=openvpn-as
+      state=latest
+      
+  - name: Change User password
+    user:
+      name: openvpn
+      update_password: always
+      password: "{{ openvpnpassword|password_hash('sha512') }}"
+      
+  - name: Restart openvpn-server
+    systemd:
+      name: openvpnas
+      state: restarted
+      enabled: yes
+      
+  - name: add firewalld rich-rules
+    firewalld:
+        rich_rule: 'rule family="ipv4" source address=185.15.0.0/16 accept'
+        zone: public
+        immediate: yes
+        permanent: true
+        state: enabled
+
+  - firewalld:
+        rich_rule: 'rule family="ipv4" source address=80.245.121.0/24 accept' 
+        zone: public
+        immediate: yes
+        permanent: true
+        state: enabled
+
+  - firewalld:
+        rich_rule: 'rule family="ipv4" source address=213.59.0.0/16 accept' 
+        zone: public
+        immediate: yes
+        permanent: true
+        state: enabled
+
+  - firewalld:
+        rich_rule: 'rule family="ipv4" source address=37.200.67.157 accept'
+        zone: public
+        immediate: yes
+        permanent: true
+        state: enabled
+
+  - name: remove dhcp6 and ssh rules and set target to zone DROP
+    command: firewall-cmd --zone=public --permanent --remove-service=dhcpv6-client
+  - command: firewall-cmd --zone=public --permanent --remove-service=ssh
+  - command: firewall-cmd --set-target=DROP --zone=public --permanent
+  - command: firewall-cmd --reload
