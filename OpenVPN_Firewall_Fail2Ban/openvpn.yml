@@ -49,6 +49,12 @@
       name: openvpnas
       state: restarted
       enabled: yes
+
+  - name: Enable Firewall service
+    systemd:
+      name: firewalld
+      enabled: yes
+      state: started
       
   - name: add firewalld rich-rules
     firewalld:
