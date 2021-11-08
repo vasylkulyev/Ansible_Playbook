@@ -1,0 +1,94 @@
+---
+- name: Useful Tricks
+  hosts: linux
+  become: yes
+
+  tasks:
+  - name: Ping my Servers
+    ping:
+    tags: ping
+
+  - name: Print Linux Version (variable)
+    debug:
+      var: ansible_os_family
+    tags: print
+
+  - debug:
+      msg: "Path to Source File is: {{ src_file }}"
+    tags: print
+
+  - set_fact: from_to="{{ src_file }} to {{ dst_file }}"
+    tags: print
+
+  - debug:
+      var: from_to
+    tags: print
+
+  - shell: uptime
+    register: results
+    tags: print
+
+  - debug:
+      var: results.stdout
+    tags: print
+
+  - block: # Ubuntu #
+      - name: Update
+        apt: update_cache=yes
+        tags: web
+
+      - name: Install Web Server Ubuntu
+        apt: name=apache2 state=latest
+        tags: web
+
+      - name: Copy index.html
+        copy: src={{ src_file }} dest={{ dst_file }} mode=0555
+        notify: Restart_Apache_Debian
+        tags: copy
+
+      - name: Start Web Server and Enable for Ubuntu
+        service: name=apache2 state=started enabled=yes
+        tags: web
+
+      - name: Remove Web Server
+        apt: name=apache2 state=absent
+        tags: uninstall
+
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    ignore_errors: yes
+
+  - block: # RedHat #
+      - name: Update
+        yum: update_cache=yes
+        tags: web
+
+      - name: Install Web Server Centos
+        yum: name=httpd state=latest
+        tags: web
+
+      - name: Copy index.html
+        copy: src={{ src_file }} dest={{ dst_file }} mode=0555
+        notify: Restart_Apache_RedHat
+        tags: copy
+
+      - name: Start Web Server and Enable for RedHat
+        service: name=httpd state=started enabled=yes
+        tags: web
+
+      - name: Remove Web Server
+        yum: name=httpd state=absent
+        tags: uninstall
+
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
+
+  - name: Delete index.html
+    file: path=/var/www/html/index.html state=absent
+    tags: uninstall
+
+  handlers:
+  - name: Restart_Apache_RedHat
+    service: name=httpd state=restarted
+
+  - name: Restart_Apache_Debian
+    service: name=apache2 state=restarted
