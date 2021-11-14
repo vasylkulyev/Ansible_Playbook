@@ -11,6 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: list repository
-        run: ls -la
-
+      - name: If YML Exist
+        run: find . -type f -iname "*.yml" | wc -l | { read c_result; test $c_result -gt 1 && exit 0 || exit 1; }
