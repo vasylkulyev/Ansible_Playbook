@@ -1,0 +1,97 @@
+---
+# tasks file for web_deploy
+  - name: Ping my Servers
+    ping:
+    tags: ping
+
+  - name: Print Linux Version (variable)
+    debug:
+      var: ansible_os_family
+    tags: print
+
+  - debug:
+      msg: "Path to Source File is: {{ src_file }}"
+    tags: print
+
+  - set_fact: from_to="{{ src_file }} to {{ dst_file }}"
+    tags: print
+
+  - debug:
+      var: from_to
+    tags: print
+
+  - shell: uptime
+    register: results
+    tags: print
+
+  - debug:
+      var: results.stdout
+    tags: print
+
+  - block: # Ubuntu #
+      - name: Update
+        apt: update_cache=yes
+        tags: web
+
+      - name: Install Web Server Ubuntu
+        apt: name=apache2 state=latest
+        tags: web
+
+      - name: Start Web Server and Enable for Ubuntu
+        service: name=apache2 state=started enabled=yes
+        tags: web
+
+      - name: Remove Web Server
+        apt: name=apache2 state=absent
+        tags: uninstall
+
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    ignore_errors: yes
+
+  - block: # RedHat #
+      - name: Update
+        yum: update_cache=yes
+        tags: web
+
+      - name: Install Web Server Centos
+        yum: name=httpd state=latest
+        tags: web
+
+      - name: Start Web Server and Enable for RedHat
+        service: name=httpd state=started enabled=yes
+        tags: web
+
+      - name: Remove Web Server
+        yum: name=httpd state=absent
+        tags: uninstall
+
+    when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+    ignore_errors: yes
+
+  - name: Delete directory
+    file: path=/var/www/html/ state=absent
+    tags: uninstall
+
+  - name: Generate index.html File
+    template: src=index.j2 dest={{ dst_folder }}/index.html mode=0555
+    notify:
+      - Restart_Apache_RedHat
+      - Restart_Apache_Debian
+    tags: copy
+
+  - name: Copy Files
+    copy: src={{ item }} dest={{ dst_folder }} mode=0555
+###
+    ###copy: src={{ item }} dest={{ dst_folder }} mode=0555
+    ###copy whole directory
+    ###with_fileglob: "{{ src_folder }}/*.*"
+###
+    loop: #copy over loop we must copy all files one by one
+      - "1.png"
+      - "2.png"
+      - "3.jpeg"
+      - "4.png"
+    notify:
+      - Restart_Apache_RedHat
+      - Restart_Apache_Debian
+    tags: copy

@@ -1,0 +1,9 @@
+---
+# handlers file for web_deploy
+- name: Restart_Apache_RedHat
+  service: name=httpd state=restarted
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Restart_Apache_Debian
+  service: name=apache2 state=restarted
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

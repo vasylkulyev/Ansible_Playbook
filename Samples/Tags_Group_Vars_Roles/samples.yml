@@ -1,0 +1,8 @@
+---
+- name: Useful Tricks
+  hosts: linux
+  become: yes
+
+  roles:
+    - { role: web_deploy, when: ansible_system == 'Linux' }
+#    - web_deploy

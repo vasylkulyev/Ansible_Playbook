@@ -1,0 +1,6 @@
+---
+# defaults file for web_deploy
+dst_folder: /var/www/html
+owner     : Vasya
+src_file  : Source_file_hidden
+dst_file  : /var/www/html
