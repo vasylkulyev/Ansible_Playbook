@@ -1,0 +1,14 @@
+---
+- name: Just samples
+  hosts: "{{ host }}"
+  become: yes
+
+  tasks:
+    - name: Ping Server
+      ping:
+      tags: ping
+
+    - include: create_folders.yml
+      tags: include
+    - include: create_files.yml
+      tags: include
