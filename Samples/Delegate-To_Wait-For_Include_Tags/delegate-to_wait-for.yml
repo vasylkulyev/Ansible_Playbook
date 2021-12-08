@@ -1,0 +1,43 @@
+---
+- name: Just samples
+  hosts: "{{ host }}"
+  become: yes
+
+  tasks:
+    - name: Ping Server
+      ping:
+      tags: ping
+
+    - name: Unregister Server From Load Balancer
+      shell: echo this server {{ inventory_hostname }} was deregistered from LoadBalancer >> /home/log.txt
+      delegate_to: 127.0.0.1
+      tags: local
+
+    - name: Start Command Only Once Any Server
+      shell: echo start
+      run_once: true
+      tags: any_server
+
+    - include: create_folders.yml
+      tags: include
+      delegate_to: 192.168.57.100
+
+    - include: create_files.yml
+      tags: include
+      delegate_to: 192.168.57.100
+
+    - name: Reboot My Servers
+      shell: sleep 3 && reboot now
+      async: 1
+      poll: 0
+
+    - name: Wait till servers come online
+      wait_for:
+          host: "{{ inventory_hostname }}"
+          state: started
+          delay: 5
+          timeout: 40
+      delegate_to: 127.0.0.1
+      tags: local
+  ignore_errors: yes
+
