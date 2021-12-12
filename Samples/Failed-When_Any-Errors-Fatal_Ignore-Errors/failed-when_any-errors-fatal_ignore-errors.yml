@@ -1,0 +1,63 @@
+---
+- name: Just samples
+  hosts: "{{ host }}"
+  become: yes
+  any_errors_fatal: true
+  gather_facts: no
+
+  tasks:
+    - name: Install with Errors
+      apt: name=treee state=latest
+      tags: error
+      ignore_errors: yes
+
+    - name: Shell Command
+      shell: echo "I like Ansible"
+      register: results
+      failed_when: results.rc == 0
+#      failed_when: "'like' in results.stdout"
+      tags: error
+    - debug:
+        var: results.stdout
+      tags: error
+
+    - name: Ping Server
+      ping:
+      tags: ping
+
+    - name: Unregister Server From Load Balancer
+      shell: echo this server {{ inventory_hostname }} was deregistered from LoadBalancer >> /home/log.txt
+      delegate_to: 127.0.0.1
+      tags: local
+
+    - name: Start Command Only Once Any Server
+      shell: echo start
+      run_once: true
+      tags: any_server
+      delegate_to: 192.168.57.100
+
+    - include: create_folders.yml
+      tags: include
+      delegate_to: 192.168.57.100
+
+    - include: create_files.yml
+      tags: include
+      delegate_to: 192.168.57.100
+
+    - name: Reboot My Servers
+      shell: sleep 3 && reboot now
+      async: 1
+      poll: 0
+      delegate_to: 192.168.57.100
+      tags: reboot
+
+    - name: Wait till servers come online
+      wait_for:
+          host: "{{ inventory_hostname }}"
+          state: started
+          delay: 5
+          timeout: 40
+      delegate_to: 127.0.0.1
+      tags: reboot
+#  ignore_errors: yes
+
