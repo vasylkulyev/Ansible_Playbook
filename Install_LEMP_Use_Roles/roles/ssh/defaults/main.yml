@@ -1,0 +1,7 @@
+---
+# defaults file for ssh
+user_name : "USER"
+public_keys : "~/.ssh/id_rsa.pub"
+ansible_ssh_user : USER
+ansible_ssh_pass : 123
+ansible_sudo_pass : 123

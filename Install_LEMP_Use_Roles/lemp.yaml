@@ -1,0 +1,18 @@
+---
+  - name: Install LEMP
+    hosts: linux 
+    become: yes
+    roles:
+      - role: ssh
+      # Installing NGINX
+      - role: nginx
+      # Installing & Setting MYSQL
+      - role: mysql
+      # Sets Up PHP Info Page
+      - role: php
+
+    tasks:
+    - name: "Reload Nginx"
+      service:
+        name: nginx
+        state: reloaded

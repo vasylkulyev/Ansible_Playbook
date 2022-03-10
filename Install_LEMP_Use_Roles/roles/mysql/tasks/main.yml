@@ -1,0 +1,37 @@
+---
+# tasks file for mysql
+      - name: "Install MySQL"
+        apt:
+          name: "mysql-server"
+          state: "latest"
+          update_cache: true
+
+      - name: "Install PyMySQL"
+        apt:
+          name: "python3-pymysql"
+          state: "latest"
+          update_cache: true
+
+      - name: "Set the root_user password"
+        community.mysql.mysql_user:
+          name: "{{ mysql_root_user }}"
+          password: "{{ mysql_root_password }}"
+          login_user: "{{ mysql_root_user }}"
+          login_password: "{{ mysql_root_password }}"
+          check_implicit_admin: true
+          login_unix_socket: /var/run/mysqld/mysqld.sock
+
+      - name: "Removes all anonymous user accounts"
+        community.mysql.mysql_user:
+          name: ''
+          host_all: yes
+          state: absent
+          login_user: "{{ mysql_root_user }}"
+          login_password: "{{ mysql_root_password }}"
+
+      - name: "Removes the MySQL test database"
+        community.mysql.mysql_db:
+          name: test
+          state: absent
+          login_user: "{{ mysql_root_user }}"
+          login_password: "{{ mysql_root_password }}"

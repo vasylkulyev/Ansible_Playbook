@@ -1,0 +1,27 @@
+---
+# tasks file for php
+      - name: "Install PHP"
+        apt: name={{ item }} update_cache=yes state=latest
+        loop: [ 'php-fpm', 'php-mysql' ]
+
+      - name: "Copy PHP Files to /var/www/"
+        copy:
+          src: "files/test-php/php_test"
+          dest: "/var/www/"
+          owner: "wkd"
+          group: "wkd"
+          mode: "0644"
+
+      - name: "Copy PHP Config Nginx /etc/nginx/sites-available"
+        copy:
+          src: "files/test-php/php_test.conf"
+          dest: "/etc/nginx/sites-available/php_test.conf"
+          owner: "wkd"
+          group: "wkd"
+          mode: "0644"
+
+      - name: "Create SymLink to sites-enabled"
+        file:
+          src: "/etc/nginx/sites-available/php_test.conf"
+          dest: "/etc/nginx/sites-enabled/php_test"
+          state: "link"
