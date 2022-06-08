@@ -1,0 +1,10 @@
+---
+- hosts: linux
+  become: yes
+  roles:
+    - role: ping
+      tags: [ ping ]
+    - role: zabbix-agent-linux
+      tags: [ zabbix ]
+    - role: setup
+      tags: [ setup ]
