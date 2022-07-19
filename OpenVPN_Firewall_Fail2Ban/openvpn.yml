@@ -9,6 +9,20 @@
       name: epel-release
       state: latest
       
+  - name: Update Cache
+    yum:
+      update_cache: yes
+
+  - name: Install Sudo
+    yum: >
+      name=sudo
+      state=latest
+
+  - name: Install Firewalld
+    yum: >
+      name=firewalld
+      state=latest
+      
   - name: Install fail2ban
     yum: >
       name=fail2ban
