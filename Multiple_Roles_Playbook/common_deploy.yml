@@ -1,0 +1,24 @@
+---
+- hosts: "{{ host }}"
+  become: yes
+  gather_facts: yes
+  roles:
+    - role: ping
+      tags: [ ping ]
+    - role: zabbix-agent-linux
+      tags: [ zabbix-agent ]
+    - role: setup
+      tags: [ setup ]
+    - role: add_to_sudoers
+      tags: [ add_to_sudoers ]
+    - role: create_user
+      tags: [ create_user ]
+    - role: package_install
+      tags: [ package_install ]
+    - role: send-ssh-key
+      tags: [ send-ssh-key ]
+    - role: ntp-server
+      tags: [ ntp-server ]
+    - role: multiple-create_user
+      tags: [ multiple-create_user ]
+

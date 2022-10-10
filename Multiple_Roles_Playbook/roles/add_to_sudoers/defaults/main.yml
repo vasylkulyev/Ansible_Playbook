@@ -1,0 +1,5 @@
+---
+# defaults file for add_to_sudoers
+###ansible_ssh_user    : wkd
+###ansible_ssh_pass    : 123
+###ansible_become_pass : 123

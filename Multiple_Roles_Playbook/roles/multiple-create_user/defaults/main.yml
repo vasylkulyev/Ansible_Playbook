@@ -1,0 +1,4 @@
+---
+# defaults file for multiple-create_user
+###adduser_user_name            :  ansible
+adduser_password             : "123456V"

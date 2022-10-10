@@ -1,0 +1,46 @@
+---
+# tasks file for ntp-server
+- block: # Ubuntu #
+    - name: Update
+      apt:
+        update_cache: yes
+
+    - name: Installation Process
+      apt: >
+        name=ntp
+        state=latest
+
+    - name: Restart Service
+      systemd:
+        name: ntp
+        state: restarted
+        enabled: yes
+
+    - name: Set timezone Moscow
+      shell: timedatectl set-timezone Europe/Moscow
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes
+
+
+- block: # CentOS #
+    - name: Update
+      yum:
+        update_cache: yes
+
+    - name: Installation Process
+      yum: >
+        name=ntp
+        state=latest
+      
+    - name: Restart Service
+      systemd:
+        name: ntpd
+        state: restarted
+        enabled: yes
+          
+    - name: Set timezone Moscow
+      shell: timedatectl set-timezone Europe/Moscow
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes

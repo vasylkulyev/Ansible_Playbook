@@ -1,0 +1,35 @@
+---
+# tasks file for multiple-create_user
+- block: # CentOS #
+    - name: Create_Users
+      user:
+        name: "{{ item.username }}"
+        password: "{{ adduser_password|password_hash('sha512') }}"
+        shell: /bin/bash
+        groups: wheel
+        state: present
+      with_items: '{{users}}'
+
+    - name: Expiring password for users
+      shell: chage --lastday 0 "{{ item.username }}"
+      with_items: '{{users}}'
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
+
+- block: # Ubuntu #
+    - name: Create_Users
+      user:
+        name: "{{ item.username }}"
+        password: "{{ adduser_password|password_hash('sha512') }}"
+        shell: /bin/bash
+        groups: sudo
+        state: present
+      with_items: '{{users}}'
+
+    - name: Expiring password for users
+      shell: chage --lastday 0 "{{ item.username }}"
+      with_items: '{{users}}'
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes

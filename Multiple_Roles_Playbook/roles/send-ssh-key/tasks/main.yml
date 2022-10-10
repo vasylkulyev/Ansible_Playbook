@@ -1,0 +1,21 @@
+---
+# tasks file for send-ssh-key
+- block: # CentOS #    
+    - name: send my pub-keys
+      authorized_key:
+        user: "{{ ansible_ssh_user }}"
+        state: present
+        key: "{{ lookup('file', '{{ ansible_ssh_user_public_key }}') }}"
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
+
+- block: # Ubuntu #      
+    - name: send my pub-keys
+      authorized_key:
+        user: "{{ ansible_ssh_user }}"
+        state: present
+        key: "{{ lookup('file', '{{ ansible_ssh_user_public_key }}') }}"
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes

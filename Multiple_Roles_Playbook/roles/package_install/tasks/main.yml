@@ -1,0 +1,28 @@
+---
+# tasks file for package_install
+- block: # Ubuntu #
+    - name: Update
+      apt:
+        update_cache: yes
+    - name: Install-packages
+      apt:
+        name: "{{ item.pkg }}"
+        state: latest
+      with_items: '{{pkgs}}'
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes
+
+
+- block: # CentOS #
+    - name: Update
+      yum:
+        update_cache: yes
+    - name: Install-packages
+      yum:
+        name: "{{ item.pkg }}"
+        state: latest
+      with_items: '{{pkgs}}'
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes

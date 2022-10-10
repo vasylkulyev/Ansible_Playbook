@@ -1,0 +1,49 @@
+---
+# tasks file for create_user_key_sudoers
+- block: # CentOS #    
+    - name: Create_User "{{ adduser_user_name }}"
+      user:
+        name: "{{ adduser_user_name }}"
+        password: "{{ adduser_password }}"
+        shell: /bin/bash
+        groups: wheel
+        state: present
+      
+    - name: send my pub-keys
+      authorized_key:
+        user: "{{ adduser_user_name }}"
+        state: present
+        key: "{{ lookup('file', '{{ adduser_public_keys }}') }}"
+
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        line: '{{ adduser_user_name }} ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
+
+- block: # Ubuntu #      
+    - name: Create_User "{{ adduser_user_name }}"
+      user:
+        name: "{{ adduser_user_name }}"
+        password: "{{ adduser_password }}"
+        shell: /bin/bash
+        groups: sudo
+        state: present
+
+    - name: send my pub-keys
+      authorized_key:
+        user: "{{ adduser_user_name }}"
+        state: present
+        key: "{{ lookup('file', '{{ adduser_public_keys }}') }}"
+
+    - name: Allow 'sudo' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        line: '{{ adduser_user_name }} ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes

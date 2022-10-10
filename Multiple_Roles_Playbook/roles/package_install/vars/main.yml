@@ -1,0 +1,12 @@
+---
+# vars file for package_install
+pkgs:
+  - pkg: mc
+  - pkg: tree
+  - pkg: iotop
+  - pkg: iftop
+  - pkg: iostat
+  - pkg: tcpdump
+  - pkg: tmux
+  - pkg: screen
+  - pkg: sysstat
