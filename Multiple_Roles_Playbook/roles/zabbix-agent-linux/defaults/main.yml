@@ -1,4 +1,0 @@
----
-# defaults file for zabbix-agent-linux
-zabbix_agent_server   : 172.16.200.5
-zabbix_agent_metadata : OS-Linux
