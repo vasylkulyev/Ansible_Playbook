@@ -1,0 +1,7 @@
+---
+# defaults file for web-page-many-files
+src_folder          : files/website
+src_templates       : templates
+dst_folder          : /var/www/html
+
+owner               : Vasya

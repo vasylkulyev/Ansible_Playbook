@@ -21,4 +21,15 @@
       tags: [ ntp-server ]
     - role: multiple-create_user
       tags: [ multiple-create_user ]
-
+    - role: create_user_key_sudoers
+      tags: [ create_user_key_sudoers ]
+    - role: my-web-page
+      tags: [ install-apache-server ]
+    - role: my-web-page-remove
+      tags: [ delete-apache-server ]
+    - role: set_fact
+      tags: [ set_fact ]
+    - role: loop_samples
+      tags: [ loop_samples ]
+    - role: web-page-many-files
+      tags: [ web-page-many-files ]

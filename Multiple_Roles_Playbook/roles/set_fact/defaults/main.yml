@@ -1,0 +1,4 @@
+---
+# defaults file for set_fact
+src_file : /home/wkd/my_dir
+dst_file : /remote/server

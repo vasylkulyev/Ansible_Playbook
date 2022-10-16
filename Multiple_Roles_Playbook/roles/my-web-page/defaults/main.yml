@@ -1,0 +1,4 @@
+---
+# defaults file for my-web-page
+src_file : "files/index.html"
+dst_file : "/var/www/html"

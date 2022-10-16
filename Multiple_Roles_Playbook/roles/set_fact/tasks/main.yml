@@ -1,0 +1,17 @@
+---
+# tasks file for set_fact
+- name: Print Linux Version (variable)
+  debug:
+    var: ansible_os_family
+
+- debug:
+    msg: "Path to Source File is: {{ src_file }}"
+
+- set_fact: from_to="{{ src_file }} to {{ dst_file }}"
+- debug:
+    var: from_to
+
+- shell: uptime
+  register: uptime
+- debug:
+    var: uptime.stdout

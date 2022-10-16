@@ -1,0 +1,52 @@
+---
+# tasks file for loop_samples
+- block: # Ubuntu #
+    - name: Update
+      apt:
+        update_cache: yes
+    - name: Install-packages
+      apt:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - "mc"
+        - "nmap"
+        - "tree"
+
+    - name: Loop Example
+      shell: echo -n Z >> myfile.txt && cat myfile.txt
+      register: echo_output
+      delay: 2
+      retries: 10
+      until: echo_output.stdout.find("ZZZZ") == false
+    - debug:
+        var: echo_output.stdout
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes
+
+
+- block: # CentOS #
+    - name: Update
+      yum:
+        update_cache: yes
+    - name: Install-packages
+      yum:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - "mc"
+        - "nmap"
+        - "tree"
+
+    - name: Loop Example
+      shell: echo -n Z >> myfile.txt && cat myfile.txt
+      register: echo_output
+      delay: 2
+      retries: 10
+      until: echo_output.stdout.find("ZZZZ") == false
+    - debug:
+        var: echo_output.stdout
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes

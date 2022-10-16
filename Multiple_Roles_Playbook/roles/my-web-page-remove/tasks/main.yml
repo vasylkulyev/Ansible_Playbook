@@ -1,0 +1,18 @@
+---
+# tasks file for my-web-page-remove
+- name: Delete index.html
+  file: path=/var/www/html/index.html state=absent
+
+- block: # Ubuntu #
+    - name: Remove Web Server
+      apt: name=apache2 state=absent
+      tags: uninstall
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes
+
+- block: # RedHat #
+    - name: Remove Web Server
+      yum: name=httpd state=absent
+      tags: uninstall
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
