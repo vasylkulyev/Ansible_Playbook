@@ -2,7 +2,10 @@
 # tasks file for set_fact
 - name: Print Linux Version (variable)
   debug:
-    var: ansible_os_family
+    var: ansible_lsb.codename
+
+- debug:
+    msg: https://download.docker.com/linux/centos/{{ ansible_distribution_major_version }}/x86_64/stable/
 
 - debug:
     msg: "Path to Source File is: {{ src_file }}"

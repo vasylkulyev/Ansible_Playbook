@@ -1,0 +1,11 @@
+---
+# defaults file for zabbix-server-via-docker
+postgres_password:   "4woo3eeshee"
+postgres_user:       "zabbixdbuser"
+postgres_db:         "zabbixdb"
+postgres_version:    "13.2"
+zabbix_version:      "6.0.1"
+zabbix_hostname:     "zabbix.awinery.loc"
+src_file:            "files/zabbix-restore-database.sh"
+src_templates:       "templates/zabbix-postgres-agent-backup-docker.j2"
+dst_folder:          "/home/{{ ansible_ssh_user }}/zabbix-docker-http"

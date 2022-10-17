@@ -1,0 +1,4 @@
+---
+# defaults file for jenkins-server-via-docker
+default_container_image: 'jenkins/jenkins:lts-jdk11'
+container_name: 'jenkins'

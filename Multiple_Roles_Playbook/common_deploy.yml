@@ -33,3 +33,9 @@
       tags: [ loop_samples ]
     - role: web-page-many-files
       tags: [ web-page-many-files ]
+    - role: docker_install
+      tags: [ docker_install ]
+    - role: zabbix-server-via-docker
+      tags: [ zabbix-server-via-docker ]
+    - role: jenkins-server-via-docker
+      tags: [ jenkins-server-via-docker ]
