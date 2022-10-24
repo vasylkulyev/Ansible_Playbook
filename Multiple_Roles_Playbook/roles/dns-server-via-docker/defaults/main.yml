@@ -1,0 +1,9 @@
+---
+# defaults file for dns-server-via-docker
+server_host_name    :  "ldap-dns.domain.loc"
+server_local_addr   :  "127.0.1.1"
+server_remote_addr  :  "10.1.30.122"
+bind_server_ver     :  "bind9"
+bind_files_owner    :  '{{ ansible_ssh_user }}'
+domain              :  "domain.loc"
+rev_domain          :  "30.1.10.in-addr.arpa"

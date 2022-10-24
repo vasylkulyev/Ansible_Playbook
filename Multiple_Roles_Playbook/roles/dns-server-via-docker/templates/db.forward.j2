@@ -1,0 +1,22 @@
+$TTL    604800
+@       IN      SOA     ns1.{{ domain }}. admin.{{ domain }}. (
+                             10         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+        IN      NS      ns1.{{ domain }}.
+
+ns1.{{ domain }}.                IN      A       {{ server_remote_addr }}
+factory-services.{{ domain }}.   IN      A       172.16.200.5
+1c-db.{{ domain }}.              IN      A       172.16.200.2
+{{ server_host_name }}.           IN      A       {{ server_remote_addr }}
+jenkins                         IN      CNAME   factory-services.{{ domain }}.
+zabbix                          IN      CNAME   factory-services.{{ domain }}.
+keycloak                        IN      CNAME   factory-services.{{ domain }}.
+rocket                          IN      CNAME   factory-services.{{ domain }}.
+rproxy.{{ domain }}.             IN      A       172.16.200.7
+gitlab                          IN      CNAME   factory-services.{{ domain }}.
+elk                             IN      CNAME   factory-services.{{ domain }}.
+share-server.{{ domain }}.       IN      A       172.16.200.3

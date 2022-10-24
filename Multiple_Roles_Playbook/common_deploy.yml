@@ -39,3 +39,5 @@
       tags: [ zabbix-server-via-docker ]
     - role: jenkins-server-via-docker
       tags: [ jenkins-server-via-docker ]
+    - role: dns-server-via-docker
+      tags: [ dns-server-via-docker ]

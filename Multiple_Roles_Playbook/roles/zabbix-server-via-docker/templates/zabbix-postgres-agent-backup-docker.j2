@@ -75,8 +75,8 @@ services:
 
   backups:
     image: postgres:{{ postgres_version }}
-    # Database backups prune interval (replace with yours). Default is 7 days.
-    # find /srv/zabbix-postgres/backups -type f -mtime +7 | xargs rm -f
+    # Database backups prune interval (replace with yours). Default is {{ backup_keep_days }} days.
+    # find /srv/zabbix-postgres/backups -type f -mtime +{{ backup_keep_days }} | xargs rm -f
 
     # Zabbix backups interval (replace with yours). Default is 1 day.
     # sleep 24h
@@ -90,7 +90,7 @@ services:
              -p 5432
              -d {{ postgres_db }}
              -U {{ postgres_user }} | gzip > /srv/zabbix-postgres/backups/zabbix-postgres-backup-$$(date "+%Y-%m-%d_%H-%M").gz
-             && find /srv/zabbix-postgres/backups -type f -mtime +7 | xargs rm -f;
+             && find /srv/zabbix-postgres/backups -type f -mtime +{{ backup_keep_days }} | xargs rm -f;
              sleep 24h; done'
     volumes:
       # Database backups location

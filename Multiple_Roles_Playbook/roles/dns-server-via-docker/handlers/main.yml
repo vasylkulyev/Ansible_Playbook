@@ -1,0 +1,22 @@
+---
+# handlers file for dns-server-via-docker
+- block: # CentOS #    
+    - name: restart named
+      service:
+        name: named
+        state: restarted      
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
+
+- block: # Ubuntu #      
+    - name: restart bind9 
+      service:
+        name: bind9
+        state: restarted
+
+    - name: restart systemd-resolved
+      service:
+        name: systemd-resolved
+        state: restarted
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes

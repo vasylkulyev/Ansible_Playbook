@@ -1,0 +1,16 @@
+$TTL    604800
+@       IN      SOA     ns1.{{ domain }}. admin.{{ domain }}. (
+                              6         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+        IN      NS      ns1.{{ domain }}.
+
+6       IN      PTR     ns1.{{ domain }}.
+6       IN      PTR     ldap-dns.{{ domain }}.
+5       IN      PTR     factory-services.{{ domain }}.
+2       IN      PTR     1c-db.{{ domain }}.
+7       IN      PTR     rproxy.{{ domain }}.
+3       IN      PTR     share-server.{{ domain }}.

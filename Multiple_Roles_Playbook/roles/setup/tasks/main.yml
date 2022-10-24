@@ -2,4 +2,4 @@
 # tasks file for setup
 - name:
   debug: 
-    msg: "{{ ansible_hostname }}"
+    msg: "{{ ansible_fqdn }}"

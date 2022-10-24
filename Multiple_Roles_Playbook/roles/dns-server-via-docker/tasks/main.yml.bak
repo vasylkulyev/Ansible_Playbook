@@ -1,0 +1,44 @@
+---
+# tasks file for dns-server-via-docker
+- block: # CentOS #
+    - name: Add fqdn to hosts config file
+      command: echo "{{ server_local_addr }}  {{ server_host_name }}" >> /etc/hosts"
+    - command: echo "{{ server_remote_addr }}  {{ server_host_name }}" >> /etc/hosts"
+
+    - name: Update
+      yum:
+        update_cache: yes
+    - name: Install Bind-Packages
+      yum:
+        name: "{{item}}"
+        state: latest
+      loop:
+          - bind9
+          - bind9utils
+          - bind9-doc
+          - bind9-host
+
+    - Set Hostname
+      hostname:
+        name: {{ server_host_name }}
+
+    - Set hostname fact
+      set_fact:
+        ansible_fqdn: {{ server_host_name }}
+
+    - 
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
+
+- block: # Ubuntu #
+    - name: Create_User "{{ adduser_user_name }}"
+      user:
+        name: "{{ adduser_user_name }}"
+        password: "{{ adduser_password|password_hash('sha512') }}"
+        shell: /bin/bash
+        groups: sudo
+        state: present
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes

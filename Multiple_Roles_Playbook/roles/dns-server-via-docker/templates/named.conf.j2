@@ -1,0 +1,41 @@
+acl "lan" {
+        172.16.200.0/24;  #Lan1
+        172.16.201.0/24;  #Lan2
+        172.16.202.0/24;  #VPN
+        185.13.18.19/32; #External
+        127.0.0.0/8;      #lointerface
+        localhost;
+};
+
+options {
+	directory "/var/cache/bind";
+        listen-on { "lan"; };
+
+	// If there is a firewall between you and nameservers you want
+	// to talk to, you may need to fix the firewall to allow multiple
+	// ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+	// If your ISP provided one or more IP addresses for stable 
+	// nameservers, you probably want to use them as forwarders.  
+	// Uncomment the following block, and insert the addresses replacing 
+	// the all-0's placeholder.
+
+	forwarders {
+	    77.88.8.88;
+            8.8.8.8;
+	};
+        recursion yes;
+        allow-recursion { "lan"; };
+        allow-query { "lan"; };
+
+	//========================================================================
+	// If BIND logs error messages about the root key being expired,
+	// you will need to update your keys.  See https://www.isc.org/bind-keys
+	//========================================================================
+	dnssec-validation auto;
+        auth-nxdomain no;
+
+	listen-on-v6 { none; };
+        version "NOT CURRENTLY AVAILABLE";
+        querylog yes;
+};

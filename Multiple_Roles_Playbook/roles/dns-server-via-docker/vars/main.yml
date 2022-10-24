@@ -1,0 +1,7 @@
+---
+# vars file for dns-server-via-docker
+pkgs:
+  - pkg: "{{ bind_server_ver }}"
+  - pkg: "{{ bind_server_ver }}utils"
+  - pkg: "{{ bind_server_ver }}-doc"
+  - pkg: "{{ bind_server_ver }}-host"
