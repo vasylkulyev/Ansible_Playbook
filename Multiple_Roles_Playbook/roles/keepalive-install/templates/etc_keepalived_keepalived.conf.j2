@@ -1,0 +1,16 @@
+vrrp_instance {{ keepalived_project_name }}-vip {
+  state {{ node_status }}
+  interface {{ keepalived_vrrp_interface }}
+  virtual_router_id 10
+  priority {{ node_priority }}
+  advert_int 3
+
+   virtual_ipaddress {
+     {{ keepalived_vip_address }} dev {{ keepalived_vrrp_interface }}
+    }
+
+   authentication {
+     auth_type PASS
+     auth_pass {{ keepalived_auth_pass }}
+    }
+}

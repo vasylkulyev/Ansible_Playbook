@@ -1,0 +1,6 @@
+---
+# vars file for keepalive-install
+node_status   :   MASTER
+###node_status   :   BACKUP
+node_priority :   244
+

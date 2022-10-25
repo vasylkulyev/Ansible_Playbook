@@ -1,0 +1,41 @@
+---
+# tasks file for keepalive-install
+- block: # CentOS #
+    - name: install keepalived
+      yum: name=keepalived state=latest
+
+    - name: copy keepalived config
+      template:
+        src: etc_keepalived_keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+        mode: 0644
+
+    - name: start keepalived
+      systemd:
+        daemon_reload: yes
+        name: keepalived
+        enabled: yes
+        state: started
+
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes
+
+- block: # Ubuntu #
+    - name: install keepalived
+      apt: name=keepalived state=latest
+
+    - name: copy keepalived config
+      template:
+        src: etc_keepalived_keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+        mode: 0644
+
+    - name: start keepalived
+      systemd:
+        daemon_reload: yes
+        name: keepalived
+        enabled: yes
+        state: started
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes
