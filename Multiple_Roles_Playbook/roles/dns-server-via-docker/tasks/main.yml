@@ -26,7 +26,7 @@
       template:
         src: named.conf.j2
         dest: /etc/named.conf
-        owner: "{{ bind_files_owner }}"
+        owner: root
         group: named
         mode: 0660
       notify: restart named
@@ -35,7 +35,7 @@
       file:
         path: /etc/named
         state: directory
-        owner: "{{ bind_files_owner }}"
+        owner: root
         group: named
         mode: 0750
 
@@ -43,7 +43,7 @@
       template:
         src: named.conf.local.j2
         dest: /etc/named/named.conf.local
-        owner: "{{ bind_files_owner }}"
+        owner: root
         group: named
         mode: 0640
       notify: restart named
@@ -52,7 +52,7 @@
       file:
         path: /etc/named/zones
         state: directory
-        owner: "{{ bind_files_owner }}"
+        owner: root
         group: named
         mode: 0750
 
@@ -60,7 +60,7 @@
       template:
         src: db.forward.j2
         dest: /etc/named/zones/db.{{ domain }}
-        owner: "{{ bind_files_owner }}"
+        owner: root
         group: named
         mode: 0640
       notify: restart named
@@ -69,7 +69,7 @@
       template:
         src: db.reverse.j2
         dest: /etc/named/zones/db.{{ rev_domain }}
-        owner: "{{ bind_files_owner }}"
+        owner: root
         group: named
         mode: 0640
       notify: restart named
@@ -80,6 +80,13 @@
         permanent: true
         state: enabled
         immediate: yes
+
+    - name: Disable IPv6 support
+      lineinfile: dest=/etc/sysconfig/named line='OPTIONS="-4"' regexp="^OPTIONS" 
+      notify: restart named
+
+    - name: Start and enable named service
+      service: name=named state=started enabled=yes
 
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   ignore_errors: yes
@@ -142,7 +149,7 @@
         mode: 0640
       notify: restart bind9
 
-    - command: echo "DNS={{ server_remote_addr }}" >> /etc/systemd/resolved.conf
+    - command: sudo bash -c 'echo "DNS={{ server_remote_addr }}" >> /etc/systemd/resolved.conf'
       notify: restart systemd-resolved
 
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
