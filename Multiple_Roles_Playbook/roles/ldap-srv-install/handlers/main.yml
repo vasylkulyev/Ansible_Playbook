@@ -1,0 +1,38 @@
+---
+# handlers file for ldap-srv-install
+- block: # Ubuntu #      
+    - name: restart slapd 
+      service:
+        name: slapd
+        state: restarted
+
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted
+
+    - name: reload apache2
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: ldapadd basedn
+      command: ldapadd -x -D cn={{ cn }},dc={{ dc2 }},dc={{ dc1 }} -W -f /home/{{ ansible_ssh_user }}/ldap/basedn.ldif
+
+    - name: ldapadd ldapgroups
+      command: ldapadd -x -D cn={{ cn }},dc={{ dc2 }},dc={{ dc1 }} -W -f /home/{{ ansible_ssh_user }}/ldap/ldapgroups.ldif
+
+    - name: ldapadd ldapusers
+      command: ldapadd -x -D cn={{ cn }},dc={{ dc2 }},dc={{ dc1 }} -W -f /home/{{ ansible_ssh_user }}/ldap/ldapusers.ldif
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes
+
+
+- block: # CentOS #    
+    - name: slapd
+      service:
+        name: slapd
+        state: restarted      
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  ignore_errors: yes

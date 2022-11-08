@@ -1,0 +1,13 @@
+dn: uid={{ ldapuser }},ou=people,dc={{ dc2 }},dc={{ dc1 }}
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: {{ ldapuser }}
+givenname: {{ firstname }}
+sn: {{ lastname }}
+userPassword: {{ ldapuserpasswd }}
+shadowLastChange: 0 #CHANGE PASSWORD ON ENTRY
+loginShell: /bin/bash
+uidNumber: {{ useridnumber }}
+gidNumber: {{ groupidnumber }}
+homeDirectory: /home/{{ ldapuser }}

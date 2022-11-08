@@ -1,0 +1,14 @@
+---
+# vars file for ldap-srv-install
+pkgs:
+  - pkg: slapd
+  - pkg: ldap-utils
+  - pkg: apache2
+  - pkg: php
+  - pkg: php-cgi
+  - pkg: libapache2-mod-php
+  - pkg: php-mbstring
+  - pkg: php-common
+  - pkg: php-pear
+  - pkg: ldap-account-manager
+

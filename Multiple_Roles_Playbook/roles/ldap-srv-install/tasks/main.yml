@@ -1,0 +1,72 @@
+---
+# tasks file for ldap-srv-install
+- block: # Ubuntu #
+    - name: Add fqdn to hosts config file
+      command: sudo bash -c 'echo "{{ server_remote_addr }}  {{ server_host_name }}" >> /etc/hosts'
+
+    - name: Set Hostname
+      hostname:
+        name: "{{ server_host_name }}"
+
+    - name: Set hostname fact
+      set_fact:
+        ansible_fqdn: "{{ server_host_name }}"
+
+    - name: Update
+      apt:
+        update_cache: yes
+        cache_valid_time: 36000
+
+    - name: Install Ldap PHP Apache2
+      apt:
+        name: "{{ item.pkg }}"
+        state: latest
+      with_items: "{{ pkgs }}"
+
+    - name: Enable PHP-CGI
+      command: sudo a2enconf php7.4-cgi
+      notify: reload apache2
+
+    - name: Create Directory of conf files
+      file:
+        path: /home/{{ ansible_ssh_user }}/ldap
+        state: directory
+        mode: 0775
+
+    - name: Create basedn conf file
+      template:
+        src: basedn.ldif.j2
+        dest: /home/{{ ansible_ssh_user }}/ldap/basedn.ldif
+        owner: "{{ ansible_ssh_user }}"
+        group: "{{ ansible_ssh_user }}"
+        mode: 0764
+      notify: ldapadd basedn
+ 
+    - name: Create ldapgroups conf file
+      template:
+        src: ldapgroups.ldif.j2
+        dest: /home/{{ ansible_ssh_user }}/ldap/ldapgroups.ldif
+        owner: "{{ ansible_ssh_user }}"
+        group: "{{ ansible_ssh_user }}"
+        mode: 0764
+      notify: ldapadd ldapgroups
+
+    - name: Create ldapusers conf file
+      template:
+        src: ldapusers.ldif.j2
+        dest: /home/{{ ansible_ssh_user }}/ldap/ldapusers.ldif
+        owner: "{{ ansible_ssh_user }}"
+        group: "{{ ansible_ssh_user }}"
+        mode: 0764
+      notify: ldapadd ldapusers
+
+#    - name: Create ldap-account-manager conf file
+#      template:
+#        src: ldap-account-manager.conf.j2
+#        dest: /etc/apache2/conf-enabled/ldap-account-manager.conf
+#        owner: root
+#        mode: 0764
+#      notify: restart apache2
+
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  ignore_errors: yes

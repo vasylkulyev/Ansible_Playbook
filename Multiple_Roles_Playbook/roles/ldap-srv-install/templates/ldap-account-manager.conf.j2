@@ -1,0 +1,25 @@
+Alias /lam /usr/share/ldap-account-manager
+
+<Directory /usr/share/ldap-account-manager>
+  Options +FollowSymLinks
+  AllowOverride All
+#  Require all granted
+  Require ip 127.0.0.1 {{ lamaddresses }} {{ lamaddresses2 }}
+  DirectoryIndex index.html
+</Directory>
+
+<Directory /var/lib/ldap-account-manager/tmp>
+  Options -Indexes
+</Directory>
+
+<Directory /var/lib/ldap-account-manager/tmp/internal>
+  Options -Indexes
+  Require all denied
+</Directory>
+
+<Directory /var/lib/ldap-account-manager/sess>
+  Options -Indexes
+  Require all denied
+</Directory>
+
+<Directory /var/lib/ldap-account-manager/config>

@@ -1,3 +1,4 @@
+#ansible-playbook -i hosts.ini --extra-var "host=ubuntu" common_deploy.yml --tags=ldap-srv-install --check
 ---
 - hosts: "{{ host }}"
   become: yes
@@ -41,3 +42,9 @@
       tags: [ jenkins-server-via-docker ]
     - role: dns-server-via-docker
       tags: [ dns-server-via-docker ]
+    - role: keepalive-install
+      tags: [ keepalive-install ]
+    - role: ldap-srv-install
+      tags: [ ldap-srv-install ]
+    - role: ldap-create-user
+      tags: [ ldap-create-user ]

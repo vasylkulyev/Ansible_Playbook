@@ -1,0 +1,17 @@
+---
+# defaults file for ldap-srv-install
+cn                  :  "admin"
+dc1                 :  "loc"
+dc2                 :  "wkd"
+domain              :  "{{ dc2 }}.{{ dc1 }}"
+server_host_name    :  "ldap-dns.{{ domain }}"
+server_remote_addr  :  "192.168.50.43"
+ldapuser            :  "v.kulyev"
+firstname           :  "Vasiliy"
+lastname            :  "Kulyev"
+ldapuserpasswd      :  "{SSHA}O8LpV3raqjF2se90OZyM/OGzA2DBAcPN"
+###1@3456!
+groupidnumber       :  "10000"
+useridnumber        :  "2000"
+lamaddresses        :  "192.168.50.0/24"
+lamaddresses2       :  "172.16.202.0/24"

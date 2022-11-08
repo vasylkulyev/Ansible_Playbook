@@ -1,5 +1,13 @@
 ---
 # tasks file for setup
-- name:
+- name: ansible_default_ipv4.interface
   debug: 
-    msg: "{{ ansible_fqdn }}"
+    msg: "{{ ansible_default_ipv4.interface }}"
+
+- name: node_status
+  debug: 
+    msg: "{{ node_status }}"
+
+- name: node_priority
+  debug: 
+    msg: "{{ node_priority }}"

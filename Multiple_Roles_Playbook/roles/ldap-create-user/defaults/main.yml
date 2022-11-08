@@ -1,0 +1,11 @@
+---
+# defaults file for ldap-create-user
+ldapuser           :  "v.kulyev"
+dc2                 :  "domain"
+dc1                 :  "loc"
+firstname           :  "Vasiliy"
+lastname            :  "Kulyev"
+ldapuserpasswd    :  "{SSHA}O8LpV3raqjF2se90OZyM/OGzA2DBAcPN"
+### 1@3456!
+groupidnumber     :  "10000"
+useridnumber      :  "2000"
