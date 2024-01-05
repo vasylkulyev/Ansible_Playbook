@@ -1,7 +1,7 @@
 ---
 # defaults file for zabbix-proxy-via-docker
 zabbix-proxy-version:      "6.0"
-zabbix-server-host:        "zabbix.egisz.rosminzdrav.ru"
+zabbix-server-host:        "zaxxxx.xxxxx.rosminzdrav.ru"
 zabbix-proxy-hostname:     "prod-cami2-proxy"
 src_templates:             "templates/zabbix-proxy-agent-docker.j2"
 dst_folder:                "/opt/zabbix-proxy"
