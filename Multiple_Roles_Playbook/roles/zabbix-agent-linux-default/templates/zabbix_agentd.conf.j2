@@ -121,7 +121,6 @@ Server={{ zabbix_agent_server }}
 # Range: 0-100
 # Default:
 # StartAgents=3
-StartAgents=8
 
 ##### Active checks related
 
@@ -195,7 +194,6 @@ HostMetadata={{ zabbix_agent_metadata }}
 # Range: 1-3600
 # Default:
 # BufferSend=5
-BufferSend=30
 
 ### Option: BufferSize
 #	Maximum number of values in a memory buffer. The agent will send
@@ -205,7 +203,6 @@ BufferSend=30
 # Range: 2-65535
 # Default:
 # BufferSize=100
-BufferSize=4096
 
 ### Option: MaxLinesPerSecond
 #	Maximum number of new lines the agent will send per second to Zabbix Server
@@ -240,7 +237,6 @@ BufferSize=4096
 # Range: 1-30
 # Default:
 # Timeout=3
-Timeout=10
 
 ### Option: AllowRoot
 #	Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
@@ -289,7 +285,6 @@ Include=/etc/zabbix/zabbix_agentd.d/*.conf
 # Range: 0-1
 # Default:
 # UnsafeUserParameters=0
-UnsafeUserParameters=1
 
 ### Option: UserParameter
 #	User-defined parameter to monitor. There can be several user-defined parameters.

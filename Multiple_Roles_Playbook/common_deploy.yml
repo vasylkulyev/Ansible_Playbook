@@ -8,6 +8,8 @@
       tags: [ ping ]
     - role: zabbix-agent-linux
       tags: [ zabbix-agent ]
+    - role: zabbix-agent-linux-default
+      tags: [ zabbix-agent-default ]
     - role: setup
       tags: [ setup ]
     - role: add_to_sudoers
