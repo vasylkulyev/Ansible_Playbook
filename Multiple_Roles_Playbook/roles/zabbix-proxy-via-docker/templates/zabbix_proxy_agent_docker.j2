@@ -2,12 +2,12 @@ version: '3.5'
 services:
   zabbix-proxy-sqlite3-egisz:
     container_name: zabbix-proxy-egisz
-    image: zabbix/zabbix-proxy-sqlite3:alpine-{{ zabbix-proxy-version }}-latest
+    image: zabbix/zabbix-proxy-sqlite3:alpine-{{ zabbix_proxy_version }}-latest
     network_mode: "host"
     volumes:
     - /etc/localtime:/etc/localtime:ro
     - /etc/timezone:/etc/timezone:ro 
-    - ./egisz-{{ zabbix-proxy-hostname }}.psk:/etc/zabbix/egisz.psk
+    - ./egisz-{{ zabbix_proxy_hostname }}.psk:/etc/zabbix/egisz.psk
     ulimits:
       nproc: 65535
       nofile:
@@ -22,8 +22,8 @@ services:
           cpus: '0.3'
           memory: 256M
     environment:
-      ZBX_SERVER_HOST: "{{ zabbix-server-host }}"
-      ZBX_HOSTNAME: {{ zabbix-proxy-hostname }}
+      ZBX_SERVER_HOST: {{ zabbix_server_host }}
+      ZBX_HOSTNAME: {{ zabbix_proxy_hostname }}
       ZBX_ENABLEREMOTECOMMANDS: "0"
       ZBX_PROXYLOCALBUFFER: "4"
       ZBX_PROXYOFFLINEBUFFER: "24"
@@ -43,7 +43,7 @@ services:
       ZBX_HISTORYCACHESIZE: "64M"
       ZBX_HISTORYINDEXCACHESIZE: "16M"
       ZBX_TIMEOUT: "5"
-      ZBX_TLSPSKIDENTITY: {{ zabbix-proxy-hostname }}
+      ZBX_TLSPSKIDENTITY: {{ zabbix_proxy_hostname }}
       ZBX_TLSCONNECT: psk
       ZBX_TLSPSKFILE: /etc/zabbix/egisz.psk
     stop_grace_period: 30s
