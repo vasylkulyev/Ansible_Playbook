@@ -50,3 +50,5 @@
       tags: [ ldap-srv-install ]
     - role: ldap-create-user
       tags: [ ldap-create-user ]
+    - role: zabbix-proxy-via-docker
+      tags: [ zabbix-proxy ]
